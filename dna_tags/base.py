@@ -8,9 +8,8 @@ class Base(Enum):
     G = 3
 
     @classmethod
-    def _missing_(cls, value):
-        if value == 4:
-            return cls.A
+    def _missing_(cls, value: int):
+        return cls(value % 4)
 
     @property
     def bin(self):
@@ -39,4 +38,4 @@ class Base(Enum):
         new = self.value - other_num
         if new < 0:
             new += 4
-        return Base(new)
+        return self.__class__(new)

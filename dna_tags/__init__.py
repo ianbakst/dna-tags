@@ -1,12 +1,12 @@
 from .base import Base
-from .encoder import DoubleErrorCorrectionEncoder, Encoder, NullEncoder
+from .encoder import Encoder, NullEncoder, QuaternaryHammingEncoder
 from .tag import Tag, TagFactory
 
 __all__ = [
     "Base",
-    'DoubleErrorCorrectionEncoder',
     "Encoder",
     "NullEncoder",
+    "QuaternaryHammingEncoder",
     "Tag",
     "TagFactory",
 ]

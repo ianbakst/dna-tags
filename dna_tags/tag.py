@@ -27,6 +27,7 @@ class TagFactory:
         total_length: Optional[int] = None,
         message_length: Optional[int] = None,
         encoder: Optional[Encoder] = None,
+        **encoder_options,
     ):
         if total_length is None and message_length is None:
             raise ValueError("Must specify at least overall_sequence_length or message_length")
@@ -34,11 +35,15 @@ class TagFactory:
         self.encoder = (
             NullEncoder(total_length, message_length)
             if encoder is None
-            else encoder(total_length=total_length, message_length=message_length)
+            else encoder(
+                total_length=total_length, message_length=message_length, **encoder_options
+            )
         )
 
         self.sequence_length = self.encoder.total_length if total_length is None else total_length
-        self.message_length = self.encoder.message_length if message_length is None else message_length
+        self.message_length = (
+            self.encoder.message_length if message_length is None else message_length
+        )
 
     @property
     def next_tag_number(self):
@@ -60,7 +65,7 @@ class TagFactory:
 
     def create_tags(self, num: Optional[int] = None) -> Generator[Tag, None, None]:
         if num is None:
-            num = 4 ** self.message_length
+            num = 4**self.message_length
         for _ in range(num):
             yield self._create()
 

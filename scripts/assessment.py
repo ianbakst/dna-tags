@@ -11,9 +11,7 @@ if __name__ == "__main__":
     print(len(all_tags))
     print("___________________________________")
     print("All Tag Sequences of 6 Bases in Hamming4 Scheme:")
-    tag_factory = dna.TagFactory(
-        total_length=6, encoder=dna.encoder.DoubleErrorCorrectionEncoder
-    )
+    tag_factory = dna.TagFactory(total_length=6, encoder=dna.encoder.QuaternaryHammingEncoder)
     print(
         tag_factory.encoder.parity,
         tag_factory.encoder.message_length,
@@ -23,6 +21,9 @@ if __name__ == "__main__":
     for t in all_tags:
         tt = t
         print(tt)
+        tt.bases[3] = dna.Base(tt.bases[3] + 3)
+        print(tt)
+        print(tag_factory.decode(tt))
+        print("-")
     print(len(all_tags))
     print("-----------------------------------")
-
