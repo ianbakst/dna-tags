@@ -17,8 +17,8 @@ jobs:
       - name: Install Dependencies
         run: pip install -r ./dev-requirements.txt
       - name: Lint
-        run: invoke lint
+        run: python -m invoke lint
       - name: Format
-        run: invoke format
+        run: python -m invoke format
       - name: Test
-        run: invoke test
+        run: python -m invoke test
