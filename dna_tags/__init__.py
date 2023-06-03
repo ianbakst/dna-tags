@@ -1,5 +1,11 @@
 from .base import Base
-from .encoder import BinaryHammingEncoder, Encoder, DecodeError, NullEncoder, QuaternaryHammingEncoder
+from .encoder import (
+    BinaryHammingEncoder,
+    Encoder,
+    DecodeError,
+    NullEncoder,
+    QuaternaryHammingEncoder,
+)
 from .tag import Tag, TagFactory
 
 __all__ = [

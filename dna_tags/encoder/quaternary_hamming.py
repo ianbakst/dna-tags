@@ -41,7 +41,9 @@ class QuaternaryHammingEncoder(Encoder):
 
     def encode(self, tag_number: int) -> List[Base]:
         if tag_number >= self.max_tags:
-            raise ValueError(f"Tag number is out of range. Exceeds maximum tag number of {self.max_tags}.")
+            raise ValueError(
+                f"Tag number is out of range. Exceeds maximum tag number of {self.max_tags}."
+            )
         tag_str = bin(tag_number)[2:]
         tag_str = "0" * (2 * self.message_length - len(tag_str)) + tag_str
         args = [iter(tag_str)] * 2

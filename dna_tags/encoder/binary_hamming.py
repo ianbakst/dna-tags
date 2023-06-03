@@ -14,7 +14,7 @@ class BinaryHammingEncoder(Encoder):
         **kwargs,
     ):
         if (message_bits is None and total_length is None) or (
-                message_bits is not None and total_length is not None
+            message_bits is not None and total_length is not None
         ):
             raise ValueError("Must specify either message length, or total length.")
         if message_bits is not None:
@@ -39,7 +39,9 @@ class BinaryHammingEncoder(Encoder):
 
     def encode(self, tag_number: int):
         if tag_number >= self.max_tags:
-            raise ValueError(f"Tag number is out of range. Exceeds maximum tag number of {self.max_tags}.")
+            raise ValueError(
+                f"Tag number is out of range. Exceeds maximum tag number of {self.max_tags}."
+            )
         tag_str = bin(tag_number)[2:]
         tag_str = "0" * (self.message_length - len(tag_str)) + tag_str
         bit_list = [i for i in tag_str]
@@ -57,8 +59,11 @@ class BinaryHammingEncoder(Encoder):
 
     def decode(self, tag: List[Base]) -> List[Base]:
         tag_bits = [int(s) for s in "".join([b.bin for b in tag])]
-        tag_bits.extend([0] * ((2 ** self.parity) - len(tag_bits)))
-        correction = [self.compute_parity(get_from_list(tag_bits, order=p)) for p in range(self.parity, 0, -1)][::-1]
+        tag_bits.extend([0] * ((2**self.parity) - len(tag_bits)))
+        correction = [
+            self.compute_parity(get_from_list(tag_bits, order=p))
+            for p in range(self.parity, 0, -1)
+        ][::-1]
 
         overall_parity = self.compute_parity(tag_bits)
         if max(correction) == 1 and overall_parity == 0:

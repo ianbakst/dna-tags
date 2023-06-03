@@ -40,7 +40,9 @@ class NullEncoder(Encoder):
 
     def encode(self, tag_number: int) -> List[Base]:
         if tag_number >= 4**self.message_length:
-            raise ValueError(f"Tag number is out of range. Exceeds maximum tag number of {4**self.message_length}.")
+            raise ValueError(
+                f"Tag number is out of range. Exceeds maximum tag number of {4**self.message_length}."
+            )
         tag_str = bin(tag_number)[2:]
         tag_str = "0" * (2 * self.total_length - len(tag_str)) + tag_str
         args = [iter(tag_str)] * 2
