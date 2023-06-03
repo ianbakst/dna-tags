@@ -1,4 +1,4 @@
-name: CI checks for
+name: CI checks for DNA Tags
 
 on:
   pull_request:
