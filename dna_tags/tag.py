@@ -1,4 +1,3 @@
-from itertools import zip_longest
 from typing import Generator, List, Optional
 
 from .base import Base
@@ -27,13 +26,14 @@ class TagFactory:
         total_length: Optional[int] = None,
         message_length: Optional[int] = None,
         encoder: Optional[Encoder] = None,
+        forbidden_tags: Optional[List[Tag]] = None,
         **encoder_options,
     ):
         if total_length is None and message_length is None:
             raise ValueError("Must specify at least overall_sequence_length or message_length")
         self.next_tag_number = 0
         self.encoder = (
-            NullEncoder(total_length, message_length)
+            NullEncoder(total_length)
             if encoder is None
             else encoder(
                 total_length=total_length, message_length=message_length, **encoder_options
@@ -41,9 +41,6 @@ class TagFactory:
         )
 
         self.sequence_length = self.encoder.total_length if total_length is None else total_length
-        self.message_length = (
-            self.encoder.message_length if message_length is None else message_length
-        )
 
     @property
     def next_tag_number(self):
@@ -57,15 +54,11 @@ class TagFactory:
 
     def _create(self) -> Tag:
         n = self.next_tag_number
-        binary_rep = bin(n)[2:]
-        bin_str = "0" * (2 * self.message_length - len(binary_rep)) + binary_rep
-        args = [iter(bin_str)] * 2
-        bases = [Base(int("".join(c), 2)) for c in zip_longest(*args)]
-        return Tag(self.encoder.encode(bases))
+        return Tag(self.encoder.encode(n))
 
     def create_tags(self, num: Optional[int] = None) -> Generator[Tag, None, None]:
         if num is None:
-            num = 4**self.message_length
+            num = self.encoder.max_tags
         for _ in range(num):
             yield self._create()
 

@@ -1,73 +1,8 @@
-from abc import ABC, abstractmethod
-from math import ceil
+from itertools import zip_longest
 from typing import List, Optional
 
-from .base import Base
-
-
-class DecodeError(Exception):
-    pass
-
-
-def get_from_list(tag_list: list, order: int = 0) -> list:
-    if order == 0:
-        return tag_list
-    new_list = []
-    s = ceil(len(tag_list) / (2**order))
-    for i in range((2**order)):
-        if i % 2 == 1:
-            new_list.extend(tag_list[s * i : s * (i + 1)])
-    return new_list
-
-
-def not_powers_of_2(tag: list) -> list:
-    new_tag = []
-    for i, t in enumerate(tag):
-        if not (i & (i - 1) == 0):
-            new_tag.append(t)
-    return new_tag
-
-
-class Encoder(ABC):
-    total_length: int
-    message_length: int
-    parity: int
-
-    @abstractmethod
-    def __init__(
-        self, message_length: Optional[int], total_length: Optional[int], detect_double: Optional
-    ):
-        pass
-
-    @abstractmethod
-    def encode(self, tag: List[Base]) -> List[Base]:
-        pass
-
-    @abstractmethod
-    def decode(self, tag: List[Base]) -> List[Base]:
-        pass
-
-
-class NullEncoder(Encoder):
-    def __init__(
-        self,
-        message_length: Optional[int] = None,
-        total_length: Optional[int] = None,
-        detect_double: bool = False,
-    ):
-        if (message_length is None and total_length is None) or (
-            message_length is not None and total_length is not None
-        ):
-            raise ValueError("Must specify either message length, or total length.")
-        self.total_length = message_length if total_length is None else total_length
-        self.message_length = self.total_length
-        self.parity = 0
-
-    def encode(self, tag: List[Base]) -> List[Base]:
-        return tag
-
-    def decode(self, tag: List[Base]) -> List[Base]:
-        return tag
+from .encoder import DecodeError, Encoder, get_from_list
+from ..base import Base
 
 
 class QuaternaryHammingEncoder(Encoder):
@@ -93,22 +28,28 @@ class QuaternaryHammingEncoder(Encoder):
         if total_length is not None:
             self.total_length = total_length
             for i in range(2, 10):
-                if total_length <= (2**i):
+                if total_length <= (2**i - 1):
                     self.parity = i
                     self.message_length = self.total_length - self.parity
                     self.message_length -= 1 if self.detect_double else 0
                     break
+        self.max_tags = 4**self.message_length
 
     @staticmethod
     def compute_parity(base_list: List[Base]) -> Base:
         return Base(4 - sum(base_list) % 4)
 
-    def encode(self, tag: List[Base]) -> List[Base]:
-        if len(tag) != self.message_length:
-            raise ValueError("Message passed is too long for given encoder.")
+    def encode(self, tag_number: int) -> List[Base]:
+        if tag_number >= self.max_tags:
+            raise ValueError(f"Tag number is out of range. Exceeds maximum tag number of {self.max_tags}.")
+        tag_str = bin(tag_number)[2:]
+        tag_str = "0" * (2 * self.message_length - len(tag_str)) + tag_str
+        args = [iter(tag_str)] * 2
+        bases = [Base(int("".join(c), 2)) for c in zip_longest(*args)]
         encoded = []
-        for i in range(self.total_length):
-            encoded.append(Base(0) if i & (i - 1) == 0 else tag.pop(0))
+        for i in range(self.total_length + 0 if self.detect_double else 1):
+            encoded.append(Base(0) if i & (i - 1) == 0 else bases.pop(0))
+            print(tag_number, i, encoded)
         encoded.extend([Base(0)] * ((2**self.parity) - len(encoded)))
         for i, p in enumerate(range(self.parity, 0, -1)):
             parity_base_list = get_from_list(encoded, order=p)
