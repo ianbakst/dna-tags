@@ -1,0 +1,24 @@
+name: CI checks for
+
+on:
+  pull_request:
+    branches:
+      - main
+  jobs:
+    run_checks:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Check Out Repository
+          uses: actions/checkout@v3
+        - name: Install Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: 3.9
+        - name: Install Dependencies
+          run: pip install -r ./dev-requirements.txt
+        - name: Lint
+          run: invoke lint
+        - name: Format
+          run: invoke format
+        - name: Test
+          run: invoke test
