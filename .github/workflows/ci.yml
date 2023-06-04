@@ -16,6 +16,8 @@ jobs:
           python-version: 3.11
       - name: Install Dependencies
         run: pip install -r ./dev-requirements.txt
+      - name: Install Package
+        run: pip install .
       - name: Lint
         run: python -m invoke lint
       - name: Format
