@@ -37,6 +37,7 @@ tags_all = [t for t in tag_factory.create_tags()]
 The tag factory object takes several keyword arguments:
 * `encoder` this is an encoder object responsible for implementing the encoding scheme.
 * `total_length [Optional]` when specified, this is the total length in bases.
+* `**encoder_options` These are encoder specific options such as `message_bits` or `message_length` to be passed down to the encoder.
 
 ## Encoders
 Encoders are available to address the application of an error detection or correction scheme.

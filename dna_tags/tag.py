@@ -18,6 +18,9 @@ class Tag:
     def __repr__(self):
         return "".join(base.name for base in self.bases)
 
+    def __len__(self):
+        return len(self.bases)
+
     @property
     def bin(self) -> str:
         """Binary representation of a tag."""
