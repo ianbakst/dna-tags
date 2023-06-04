@@ -66,3 +66,9 @@ The `QuaternaryHammingEncoder` encodes the tag in a Quaternary Hamming (H4) sche
 of this scheme: with and without double error detection (toggled with the `detect_double` parameter).
 Adding double error detection increases the tag size by one base. However, without double error
 detection, the scheme cannot detect, or be guaranteed to correct tags with 2 or more errors.
+
+### Simple Parity Encoder
+The `SimpleParityEncoder` appends the tag with a single parity base, computed based on the 
+bases in the tag. Upon decoding, the parity base is compared to the expected parity. A mismatch is
+indicative of a single base error. Errors of any other kind, including multiple base substitutions
+cannot be detected.
