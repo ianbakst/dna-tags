@@ -1,5 +1,4 @@
 from itertools import zip_longest
-from math import ceil
 from typing import List, Optional
 
 from .encoder import DecodeError, Encoder, get_from_list
@@ -22,7 +21,7 @@ class BinaryHammingEncoder(Encoder):
             for i in range(2, 10):
                 if self.message_length <= (2**i - i - 1):
                     self.parity = i
-                    self.total_length = int(2 * ceil(0.5 * (self.parity + self.message_length)))
+                    self.total_length = self.parity + self.message_length + 1
                     break
         if total_length is not None:
             self.total_length = 2 * total_length
@@ -44,11 +43,11 @@ class BinaryHammingEncoder(Encoder):
             )
         tag_str = bin(tag_number)[2:]
         tag_str = "0" * (self.message_length - len(tag_str)) + tag_str
-        bit_list = [i for i in tag_str]
+        bit_list = [int(i) for i in tag_str]
         encoded = []
         for i in range(self.total_length):
-            encoded.append(0 if i & (i - 1) == 0 else int(bit_list.pop(0)))
-
+            encoded.append(0 if i & (i - 1) == 0 else bit_list.pop(0))
+        encoded.extend([0] * (2**self.parity - self.total_length))
         for i, p in enumerate(range(self.parity, 0, -1)):
             parity_bit_list = get_from_list(encoded, order=p)
             encoded[2**i] = self.compute_parity(parity_bit_list)
