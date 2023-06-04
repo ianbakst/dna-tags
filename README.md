@@ -9,7 +9,7 @@
 
 ## Basic Workflow:
 At the core of the package is the TagFactory object, which controls the generation of tags.
-The TagFactory keeps track of which
+By default, the TagFactory generates tags in sequential order.
 
 ```python
 import dna_tags as dna
@@ -32,6 +32,11 @@ tag_factory.reset_tag_number()
 # Generate all tags in a given scheme/size
 tags_all = [t for t in tag_factory.create_tags()]
 ```
+
+## The Tag Factory Object
+The tag factory object takes several keyword arguments:
+* `encoder` this is an encoder object responsible for implementing the encoding scheme.
+* `total_length [Optional]` when specified, this is the total length in bases.
 
 ## Encoders
 Encoders are available to address the application of an error detection or correction scheme.

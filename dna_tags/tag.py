@@ -35,7 +35,6 @@ class TagFactory:
         *,
         total_length: Optional[int] = None,
         encoder: Optional[Encoder] = None,
-        forbidden_tags: Optional[List[Tag]] = None,
         **encoder_options,
     ):
         self.next_tag_number = 0

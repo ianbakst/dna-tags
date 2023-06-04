@@ -1,4 +1,5 @@
 from itertools import zip_longest
+from math import ceil
 from typing import List, Optional
 
 from .encoder import DecodeError, Encoder, get_from_list
@@ -21,14 +22,16 @@ class BinaryHammingEncoder(Encoder):
             for i in range(2, 10):
                 if self.message_length <= (2**i - i - 1):
                     self.parity = i
-                    self.total_length = self.parity + self.message_length + 1
+                    self.total_bits = self.parity + self.message_length + 1
+                    self.total_length = int(ceil(self.total_bits / 2))
                     break
         if total_length is not None:
-            self.total_length = 2 * total_length
+            self.total_length = total_length
+            self.total_bits = 2 * self.total_length
             for i in range(2, 10):
-                if self.total_length <= (2**i):
+                if self.total_bits <= (2**i):
                     self.parity = i
-                    self.message_length = self.total_length - self.parity - 1
+                    self.message_length = self.total_bits - self.parity - 1
                     break
         self.max_tags = 2**self.message_length
 
@@ -45,16 +48,16 @@ class BinaryHammingEncoder(Encoder):
         tag_str = "0" * (self.message_length - len(tag_str)) + tag_str
         bit_list = [int(i) for i in tag_str]
         encoded = []
-        for i in range(self.total_length):
+        for i in range(self.total_bits):
             encoded.append(0 if i & (i - 1) == 0 else bit_list.pop(0))
-        encoded.extend([0] * (2**self.parity - self.total_length))
+        encoded.extend([0] * (2**self.parity - self.total_bits))
         for i, p in enumerate(range(self.parity, 0, -1)):
             parity_bit_list = get_from_list(encoded, order=p)
             encoded[2**i] = self.compute_parity(parity_bit_list)
 
         encoded[0] = self.compute_parity(encoded[1:])
         args = [iter([str(e) for e in encoded])] * 2
-        return [Base(int("".join(c), 2)) for c in zip_longest(*args)]
+        return [Base(int("".join(c), 2)) for c in zip_longest(*args)][: self.total_length]
 
     def decode(self, tag: List[Base]) -> List[Base]:
         tag_bits = [int(s) for s in "".join([b.bin for b in tag])]
@@ -74,5 +77,5 @@ class BinaryHammingEncoder(Encoder):
             tag_bits[pos_corr] = (tag_bits[pos_corr] - max(correction)) % 2
             print(tag_bits)
 
-        args = [iter([str(e) for e in tag_bits[: self.total_length]])] * 2
+        args = [iter([str(e) for e in tag_bits[: self.total_bits]])] * 2
         return [Base(int("".join(c), 2)) for c in zip_longest(*args)]
