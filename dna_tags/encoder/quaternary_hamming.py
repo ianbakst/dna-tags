@@ -6,12 +6,21 @@ from ..base import Base
 
 
 class QuaternaryHammingEncoder(Encoder):
+    """ """
+
     def __init__(
         self,
         message_length: Optional[int] = None,
         total_length: Optional[int] = None,
         detect_double: bool = True,
     ):
+        """
+        Initialize the Quaternary Hamming Encoder.
+        :param message_length: Total Message Length in Bases
+        :param total_length: Total Tag length (including check bases)
+        :param detect_double: Whether an additional base will be added to be able to detect double base substitution
+                              errors
+        """
         self.detect_double = detect_double
         if (message_length is None and total_length is None) or (
             message_length is not None and total_length is not None
@@ -28,7 +37,7 @@ class QuaternaryHammingEncoder(Encoder):
         if total_length is not None:
             self.total_length = total_length
             for i in range(2, 10):
-                if total_length <= (2**i - 1):
+                if total_length <= (2**i - (0 if self.detect_double else 1)):
                     self.parity = i
                     self.message_length = self.total_length - self.parity
                     self.message_length -= 1 if self.detect_double else 0
