@@ -21,7 +21,7 @@ class Encoder(ABC):
         pass
 
     @abstractmethod
-    def encode(self, tag: List[Base]) -> List[Base]:
+    def encode(self, tag_number: int) -> List[Base]:
         pass
 
     @abstractmethod

@@ -49,9 +49,8 @@ class QuaternaryHammingEncoder(Encoder):
         args = [iter(tag_str)] * 2
         bases = [Base(int("".join(c), 2)) for c in zip_longest(*args)]
         encoded = []
-        for i in range(self.total_length + 0 if self.detect_double else 1):
+        for i in range(self.total_length + (0 if self.detect_double else 1)):
             encoded.append(Base(0) if i & (i - 1) == 0 else bases.pop(0))
-            print(tag_number, i, encoded)
         encoded.extend([Base(0)] * ((2**self.parity) - len(encoded)))
         for i, p in enumerate(range(self.parity, 0, -1)):
             parity_base_list = get_from_list(encoded, order=p)
