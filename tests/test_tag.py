@@ -6,7 +6,12 @@ import dna_tags as dna
 
 @pytest.mark.parametrize(
     "tot_len,encoder",
-    [(i, e) for i, e in product(range(4, 10), [dna.NullEncoder, dna.BinaryHammingEncoder, dna.QuaternaryHammingEncoder])]
+    [
+        (i, e)
+        for i, e in product(
+            range(4, 10), [dna.NullEncoder, dna.BinaryHammingEncoder, dna.QuaternaryHammingEncoder]
+        )
+    ],
 )
 def test_tag_length(tot_len, encoder):
     tf = dna.TagFactory(total_length=tot_len, encoder=encoder)
@@ -14,8 +19,7 @@ def test_tag_length(tot_len, encoder):
 
 
 @pytest.mark.parametrize(
-    "tot_len,encoder",
-    [(i, dna.QuaternaryHammingEncoder) for i in range(4, 10)]
+    "tot_len,encoder", [(i, dna.QuaternaryHammingEncoder) for i in range(4, 10)]
 )
 def test_tag_length_no_dd(tot_len, encoder):
     tf = dna.TagFactory(total_length=tot_len, encoder=encoder, detect_double=False)
@@ -24,7 +28,12 @@ def test_tag_length_no_dd(tot_len, encoder):
 
 @pytest.mark.parametrize(
     "tot_len,encoder",
-    [(i, e) for i, e in product(range(4, 10), [dna.NullEncoder, dna.BinaryHammingEncoder, dna.QuaternaryHammingEncoder])]
+    [
+        (i, e)
+        for i, e in product(
+            range(4, 10), [dna.NullEncoder, dna.BinaryHammingEncoder, dna.QuaternaryHammingEncoder]
+        )
+    ],
 )
 def test_tag_uniqueness(tot_len, encoder):
     all_tags = [t for t in dna.TagFactory(total_length=tot_len, encoder=encoder).create_tags()]
