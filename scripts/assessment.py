@@ -6,6 +6,7 @@ def print_all_tags(tf: dna.TagFactory):
     print(len(all_tags))
     for tag in all_tags:
         print(tag, end=", ")
+    print("\n")
 
 
 if __name__ == "__main__":
@@ -16,7 +17,6 @@ if __name__ == "__main__":
     print("Scheme 1: Binary Hamming")
     print("All tags of length 6")
     print_all_tags(dna.TagFactory(total_length=6, encoder=dna.BinaryHammingEncoder))
-
     print("1000+ Tags")
     print_all_tags(dna.TagFactory(encoder=dna.BinaryHammingEncoder, message_bits=10))
 
