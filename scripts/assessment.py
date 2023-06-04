@@ -31,3 +31,11 @@ if __name__ == "__main__":
     print_all_tags(
         dna.TagFactory(encoder=dna.QuaternaryHammingEncoder, message_length=5, detect_double=False)
     )
+
+    print("-----------------------------------")
+    print("Scheme 3: Simple Parity")
+    print("All tags of length 6")
+    print_all_tags(dna.TagFactory(encoder=dna.SimpleParityEncoder, total_length=6))
+
+    print("1000+ Tags")
+    print_all_tags(dna.TagFactory(encoder=dna.SimpleParityEncoder, message_length=5))
