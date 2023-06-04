@@ -37,5 +37,5 @@ class SimpleParityEncoder(Encoder):
 
     def decode(self, tag: List[Base]) -> List[Base]:
         if self.compute_parity(tag[:-1]) != tag[-1]:
-            raise DecodeError
+            raise DecodeError("A single-base error has been detected!")
         return tag[:-1]
