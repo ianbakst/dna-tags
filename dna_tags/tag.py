@@ -57,6 +57,9 @@ class TagFactory:
     def next_tag_number(self, value):
         self._next_tag_number = value
 
+    def reset_tag_number(self):
+        self.next_tag_number = 0
+
     def _create(self, tag_number: int) -> Tag:
         return Tag(self.encoder.encode(tag_number))
 
