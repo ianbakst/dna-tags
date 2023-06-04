@@ -5,6 +5,7 @@ from .encoder import (
     DecodeError,
     NullEncoder,
     QuaternaryHammingEncoder,
+    SimpleParityEncoder,
 )
 from .tag import Tag, TagFactory
 
@@ -15,6 +16,7 @@ __all__ = [
     "Encoder",
     "NullEncoder",
     "QuaternaryHammingEncoder",
+    "SimpleParityEncoder",
     "Tag",
     "TagFactory",
 ]
