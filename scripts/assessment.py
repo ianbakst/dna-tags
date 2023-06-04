@@ -3,7 +3,7 @@ import dna_tags as dna
 
 def print_all_tags(tf: dna.TagFactory):
     all_tags = [tag for tag in tf.create_tags()]
-    print(len(all_tags))
+    print(f"Total number of tags: {len(all_tags)}")
     for tag in all_tags:
         print(tag, end=", ")
     print("\n")
