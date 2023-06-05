@@ -9,7 +9,13 @@ import dna_tags as dna
     [
         (i, e)
         for i, e in product(
-            range(4, 10), [dna.NullEncoder, dna.BinaryHammingEncoder, dna.QuaternaryHammingEncoder]
+            range(4, 10),
+            [
+                dna.NullEncoder,
+                dna.BinaryHammingEncoder,
+                dna.QuaternaryHammingEncoder,
+                dna.SimpleParityEncoder,
+            ],
         )
     ],
 )
@@ -31,7 +37,13 @@ def test_tag_length_no_dd(tot_len, encoder):
     [
         (i, e)
         for i, e in product(
-            range(4, 10), [dna.NullEncoder, dna.BinaryHammingEncoder, dna.QuaternaryHammingEncoder]
+            range(4, 10),
+            [
+                dna.NullEncoder,
+                dna.BinaryHammingEncoder,
+                dna.QuaternaryHammingEncoder,
+                dna.SimpleParityEncoder,
+            ],
         )
     ],
 )

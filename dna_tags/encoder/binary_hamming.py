@@ -11,7 +11,6 @@ class BinaryHammingEncoder(Encoder):
         self,
         message_bits: Optional[int] = None,
         total_length: Optional[int] = None,
-        **kwargs,
     ):
         if (message_bits is None and total_length is None) or (
             message_bits is not None and total_length is not None
